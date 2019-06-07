@@ -4,8 +4,15 @@ app.use(express.static('./images/'))
 
 app.get('/', (req, res)=>{
     // res.send({ message: 'Success!' })
-    name = 'Nam';
     res.sendFile(__dirname+'/views/home.html')
+})
+app.get('/detail/:alias',(req,res)=>{
+    let alias = req.params.alias
+    if(alias === undefined){
+        alias = 'default';
+    }
+    // let alias = req.param('alias','default')
+    res.send({ alias })
 })
 
 const port = 3000;
