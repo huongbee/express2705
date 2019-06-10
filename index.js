@@ -16,7 +16,21 @@ app.get('/detail/:alias',(req,res)=>{
 })
 
 app.get('/:pheptinh/:a/:b',(req, res)=>{
-    const { pheptinh, a, b } = req.params
+    let { pheptinh, a, b } = req.params
+    pheptinh = pheptinh.toLowerCase()
+    arrPheptinh = ['cong','tru','nhan','chia','chiadu'];
+    if(arrPheptinh.find(pt => pheptinh===pt)){
+        const cal = new Calculatetor(pheptinh, a, b)
+        res.send({
+            pheptinh: cal.pt,
+            a: +a,
+            b: +b,
+            result: cal.result
+        })
+    }
+    else{
+        res.send({ error: true, message: 'CANNOT FIND OPERATOR!'})
+    }
 })
 
 const port = 3000;
@@ -32,8 +46,9 @@ class Calculatetor{
         if(this.pheptinh==='cong') return '+';
         if(this.pheptinh==='tru') return '-';
         if(this.pheptinh==='nhan' ) return '*';
-        if(this.pheptinh==='chia') return '/';
-        if(this.pheptinh==='chiadu') return '%';
+        if(this.pheptinh==='chia' && this.b!=0 ) return '/';
+        if(this.pheptinh==='chiadu' && this.b!=0) return '%';
+        throw new Error('Math error!')
     }
     get result(){
         let r = this.a+this.pt+this.b;  // r=2+3
