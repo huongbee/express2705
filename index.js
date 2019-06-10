@@ -16,20 +16,24 @@ app.get('/detail/:alias',(req,res)=>{
 })
 
 app.get('/:pheptinh/:a/:b',(req, res)=>{
-    let { pheptinh, a, b } = req.params
-    pheptinh = pheptinh.toLowerCase()
-    arrPheptinh = ['cong','tru','nhan','chia','chiadu'];
-    if(arrPheptinh.find(pt => pheptinh===pt)){
-        const cal = new Calculatetor(pheptinh, a, b)
-        res.send({
-            pheptinh: cal.pt,
-            a: +a,
-            b: +b,
-            result: cal.result
-        })
-    }
-    else{
-        res.send({ error: true, message: 'CANNOT FIND OPERATOR!'})
+    try {
+        let { pheptinh, a, b } = req.params
+        pheptinh = pheptinh.toLowerCase()
+        arrPheptinh = ['cong','tru','nhan','chia','chiadu'];
+        if(arrPheptinh.find(pt => pheptinh===pt)){
+            const cal = new Calculatetor(pheptinh, a, b)
+            res.send({
+                pheptinh: cal.pt,
+                a: +a,
+                b: +b,
+                result: cal.result
+            })
+        }
+        else{
+            res.send({ error: true, message: 'CANNOT FIND OPERATOR!'})
+        }
+    } catch (error) {
+        res.send({ error: true, message: error.message })
     }
 })
 
